@@ -1,374 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Landscape Processing - Lucifer</title>
+</head>
+<body>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.6.6/processing.min.js"></script>
-<script type="application/processing">
+
+<script type="application/processing" target="puebloCanvas">
 
 int calcWidth=250; 
 int calcHeight=250; 
 
 void setup() {
 
-  background(0,0,0,0);
-  fill(0,0,0,0); 
+  background(0,0,0,0);
+  fill(0,0,0,0); 
 
-  noLoop(); 
+  noLoop(); 
 
-  size(640,640);
+  size(640,640);
 
-  smooth();
+  smooth();
 
-  textAlign(CENTER,CENTER); 
+  textAlign(CENTER,CENTER); 
 
-  strokeJoin(ROUND);
+  strokeJoin(ROUND);
 
-  strokeWeight(calcWidth*0.010); 
+  strokeWeight(calcWidth*0.010); 
 
-  ellipseMode(CORNER);
+  ellipseMode(CORNER);
 
-  colorMode(HSB, 360, 100, 100); 
+  colorMode(HSB, 360, 100, 100); 
 
-  background(0,0,100); 
+  background(0,0,100); 
 
-  int hue1 = random(1,360); 
-  int hue2 = colorSplitComplementLeft(hue1);
-  int hue3 = colorSplitComplementRight(hue1); 
-  var roofHue=random(20,40);
+  int hue1 = random(1,360); 
+  int hue2 = colorSplitComplementLeft(hue1);
+  int hue3 = colorSplitComplementRight(hue1); 
+  var roofHue=random(20,40);
 
-  drawTexture('_', calcWidth*0.0320, 0.22, calcWidth*0.08, calcHeight*0.030, calcWidth*0.963, calcHeight*0.72, hue1, random(0,5), random(30,50), random(94,100), random(80,90));
+  drawTexture('_', calcWidth*0.0320, 0.22, calcWidth*0.08, calcHeight*0.030, calcWidth*0.963, calcHeight*0.72, hue1, random(0,5), random(30,50), random(94,100), random(80,90));
 
-  var mountainHue=random(0,100);
-  if (mountainHue<=33) {
-    mountainHue=hue1;
-  } else if (mountainHue<=66) {
-    mountainHue=hue2;
-  } else {
-    mountainHue=hue3;
-  }
+  var mountainHue=random(0,100);
+  if (mountainHue<=33) {
+    mountainHue=hue1;
+  } else if (mountainHue<=66) {
+    mountainHue=hue2;
+  } else {
+    mountainHue=hue3;
+  }
 
 
-  drawMountains(calcWidth*0.018,calcHeight*random(0.25,0.35),calcWidth*0.965,calcHeight*0.15, color(mountainHue,40,45,5),calcWidth*0.003);
-  drawMountains(calcWidth*0.018,calcHeight*random(0.36,0.55),calcWidth*0.965,calcHeight*0.25, color(mountainHue,40,45,40),calcWidth*0.003);
-  drawMountains(calcWidth*0.018,calcHeight*random(0.50,0.70),calcWidth*0.965,calcHeight*0.15, color(mountainHue,30,25,50),calcWidth*0.003);
+  drawMountains(calcWidth*0.018,calcHeight*random(0.25,0.35),calcWidth*0.965,calcHeight*0.15, color(mountainHue,40,45,5),calcWidth*0.003);
+  drawMountains(calcWidth*0.018,calcHeight*random(0.36,0.55),calcWidth*0.965,calcHeight*0.25, color(mountainHue,40,45,40),calcWidth*0.003);
+  drawMountains(calcWidth*0.018,calcHeight*random(0.50,0.70),calcWidth*0.965,calcHeight*0.15, color(mountainHue,30,25,50),calcWidth*0.003);
 
-  drawPueblo(calcWidth*0.015,calcHeight*random(0.40,0.65),calcWidth*0.972,calcHeight*0.25, hue1, hue2, hue3, roofHue);
+  drawPueblo(calcWidth*0.015,calcHeight*random(0.40,0.65),calcWidth*0.972,calcHeight*0.25, hue1, hue2, hue3, roofHue);
 
-  noStroke();
-  fill(0,0,100,900);
-  rect(scalePixelsX(calcWidth*0.893), scalePixelsY(calcHeight*0.930), scalePixelsX(calcWidth*1.62), scalePixelsY(calcHeight*0.030));
-  PFont fontA = loadFont("Courier New");
-  textFont(fontA, scalePixelsX(calcWidth*0.032)); 
-  fill(0,0,0,900);
-  text("LUCI",scalePixelsX(calcWidth*0.922), scalePixelsY(calcHeight*0.945));
+  noStroke();
+  fill(0,0,100,900);
+  rect(scalePixelsX(calcWidth*0.893), scalePixelsY(calcHeight*0.930), scalePixelsX(calcWidth*1.62), scalePixelsY(calcHeight*0.030));
+  PFont fontA = loadFont("Courier New");
+  textFont(fontA, scalePixelsX(calcWidth*0.032)); 
+  fill(0,0,0,900);
+  text("LUCI",scalePixelsX(calcWidth*0.922), scalePixelsY(calcHeight*0.945));
 
-  drawPictureFrame();  
-
+  drawPictureFrame(); 
+  
 }
 
 void drawTexture(string char, float txtSize, float variance, float x1, float y1, float w, float h, int hue, int startSat, int endSat, int startBri, int endBri, int opacity) {
- 
-  int dw=calcWidth*0.006;
-  int dh=calcHeight*0.008;
+  
+  int dw=calcWidth*0.006;
+  int dh=calcHeight*0.008;
 
-  float numRows=h/dh;
-  float dSat = (endSat-startSat)/numRows;
-  float dBri = (startBri-endBri)/numRows;
+  float numRows=h/dh;
+  float dSat = (endSat-startSat)/numRows;
+  float dBri = (startBri-endBri)/numRows;
 
-  if (typeof opacity == "undefined" || !opacity) {
-    opacity=100;
-  }
+  if (typeof opacity == "undefined" || !opacity) {
+    opacity=100;
+  }
 
-  textSize(scalePixelsX(txtSize));
+  textSize(scalePixelsX(txtSize));
 
-  noStroke();
-  for (int x=x1; x<x1+w; x+=dw){
-    float sat=startSat;
-    float bri=startBri;
-    for (int y=y1; y<y1+h; y+=dh) {      
-      fill(color(hue,sat,bri,opacity));
-      sat+=dSat;
-      bri-=dBri;
-      for (int i=0; i<6; i++) {
-        text(char,scalePixelsX(x+calcWidth*random(-variance, variance)),scalePixelsY(y+calcWidth*random(-variance, variance)));
-      }
-    }
- }
+  noStroke();
+  for (int x=x1; x<x1+w; x+=dw){
+    float sat=startSat;
+    float bri=startBri;
+    for (int y=y1; y<y1+h; y+=dh) {      
+      fill(color(hue,sat,bri,opacity));
+      sat+=dSat;
+      bri-=dBri;
+      for (int i=0; i<6; i++) {
+        text(char,scalePixelsX(x+calcWidth*random(-variance, variance)),scalePixelsY(y+calcWidth*random(-variance, variance)));
+      }
+    }
+   }
 }
 
 void drawMountains(float xLeft, float yBot, float w, float maxcalcHeight, color mountainColor, void blobSize) {
-  stroke(mountainColor);
-  fill(mountainColor);
-  textSize(scalePixelsX(calcWidth*0.0225));
-  float mountaincalcHeight=round(maxcalcHeight*random(0.5,1));
-  float mountainDelta=calcHeight*0.005;
-  for (x=xLeft; x<xLeft+w; x+=blobSize*0.8) {
-    for (y=calcHeight*0.972; y>yBot-mountaincalcHeight; y-=blobSize*0.8) {
-      text("x",scalePixelsX(x+calcWidth*random(-0.002,0.002)),scalePixelsY(y+calcWidth*random(-0.002,0.002)));
-    }
-    if (random(1,100)>80) {
-      mountaincalcHeight+=mountainDelta;
-    }
-    if (mountaincalcHeight>maxcalcHeight) {
-      mountaincalcHeight-=abs(mountainDelta);
-      mountainDelta=-mountainDelta;
-    } else if (mountaincalcHeight<(maxcalcHeight/2)) {
-      mountaincalcHeight+=abs(mountainDelta);
-      mountainDelta=-mountainDelta;
-    } else {
-        mountainDelta=mountainDelta*random(0.98,1.02);
-    }
-  }
+  stroke(mountainColor);
+  fill(mountainColor);
+  textSize(scalePixelsX(calcWidth*0.0225));
+  float mountaincalcHeight=round(maxcalcHeight*random(0.5,1));
+  float mountainDelta=calcHeight*0.005;
+  for (x=xLeft; x<xLeft+w; x+=blobSize*0.8) {
+    for (y=calcHeight*0.972; y>yBot-mountaincalcHeight; y-=blobSize*0.8) {
+      text("x",scalePixelsX(x+calcWidth*random(-0.002,0.002)),scalePixelsY(y+calcWidth*random(-0.002,0.002)));
+    }
+    if (random(1,100)>80) {
+      mountaincalcHeight+=mountainDelta;
+    }
+    if (mountaincalcHeight>maxcalcHeight) {
+      mountaincalcHeight-=abs(mountainDelta);
+      mountainDelta=-mountainDelta;
+    } else if (mountaincalcHeight<(maxcalcHeight/2)) {
+      mountaincalcHeight+=abs(mountainDelta);
+      mountainDelta=-mountainDelta;
+    } else {
+        mountainDelta=mountainDelta*random(0.98,1.02);
+    }
+  }
 }
 
 void drawPueblo(float xLeft, float yBot, float w, float tallest, color hue1, color hue2, color hue3, int roofHue) {
-  
-  float x=xLeft-(calcWidth*random(0.005,0.050));
-  float minW=calcWidth*random(0.04,0.08);
-  float maxW=calcWidth*random(0.14,0.18);
-  float growRatioY=1.20;
-  float growRatioX=1.24;
-  float txtSize=calcWidth*0.011;
-  float sat=int(random(3,12));
-  int dSat=int(random(0,1));
-  float bri=80;
-  int dBri=int(random(2,6));
-  int rows=0;
+  
+  float x=xLeft-(calcWidth*random(0.005,0.050));
+  float minW=calcWidth*random(0.04,0.08);
+  float maxW=calcWidth*random(0.14,0.18);
+  float growRatioY=1.20;
+  float growRatioX=1.24;
+  float txtSize=calcWidth*0.011;
+  float sat=int(random(3,12));
+  int dSat=int(random(0,1));
+  float bri=80;
+  int dBri=int(random(2,6));
+  int rows=0;
 
-  while (yBot<calcHeight*1.4) {
-    while (x<(w-xLeft)) {
-      float buildingWidth=random(minW,maxW);
-      float buildingHeight=random(tallest*0.7,tallest*0.9);
-      if (yBot>calcHeight*0.6 || random(0,10)>2) {
-        if (rows>1 || random(0,100)>50) {
-          drawBuilding(x, yBot-buildingHeight, buildingWidth, buildingHeight, sat, bri, hue1, hue2, hue3, txtSize, roofHue);
-        }
-      }
-      x+=buildingWidth+random(buildingWidth*0.10,buildingWidth*0.25); 
-    }
-    if (yBot<calcHeight*1.5 && random(0,10)>5) {
-      var treeLeft=random(calcWidth*0.015,calcWidth*0.95);
-      drawTree(treeLeft,yBot+calcHeight*0.25,random(maxW*0.26,maxW*0.36),color(hue2,sat*2,bri*0.20),calcWidth*0.003);    
-    }   
-    if (yBot<calcHeight*1.5 && random(0,10)>7) {
-      var treeLeft=random(calcWidth*0.015,calcWidth*0.95);
-      drawTree(treeLeft,yBot+calcHeight*0.25,random(maxW*0.26,maxW*0.36),color(hue3,sat*2,bri*0.20),calcWidth*0.003);    
-    }      
-    yBot*=growRatioY;
-    tallest*=growRatioY;
-    minW*=growRatioX;
-    maxW*=growRatioX;
-    sat+=dSat;
-    sat=min(sat,100);
-    bri-=dBri;
-    bri=max(0,bri);
-    txtSize*=growRatioX;
-    rows++;
-  }
+  while (yBot<calcHeight*1.4) {
+    while (x<(w-xLeft)) {
+      float buildingWidth=random(minW,maxW);
+      float buildingHeight=random(tallest*0.7,tallest*0.9);
+      if (yBot>calcHeight*0.6 || random(0,10)>2) {
+        if (rows>1 || random(0,100)>50) {
+          drawBuilding(x, yBot-buildingHeight, buildingWidth, buildingHeight, sat, bri, hue1, hue2, hue3, txtSize, roofHue);
+        }
+      }
+      x+=buildingWidth+random(buildingWidth*0.10,buildingWidth*0.25); 
+    }
+    if (yBot<calcHeight*1.5 && random(0,10)>5) {
+      var treeLeft=random(calcWidth*0.015,calcWidth*0.95);
+      drawTree(treeLeft,yBot+calcHeight*0.25,random(maxW*0.26,maxW*0.36),color(hue2,sat*2,bri*0.20),calcWidth*0.003);    
+    }    
+    if (yBot<calcHeight*1.5 && random(0,10)>7) {
+      var treeLeft=random(calcWidth*0.015,calcWidth*0.95);
+      drawTree(treeLeft,yBot+calcHeight*0.25,random(maxW*0.26,maxW*0.36),color(hue3,sat*2,bri*0.20),calcWidth*0.003);    
+    }      
+    yBot*=growRatioY;
+    tallest*=growRatioY;
+    minW*=growRatioX;
+    maxW*=growRatioX;
+    sat+=dSat;
+    sat=min(sat,100);
+    bri-=dBri;
+    bri=max(0,bri);
+    txtSize*=growRatioX;
+    rows++;
+  }
 
 }
 
 void drawBuilding(float x, float y, float w, float h, int colorSat, int colorBri, color hue1, color hue2, color hue3, float txtSize, int roofHue) {
 
-  int[] hues = { hue1, hue2, hue3 };
+  int[] hues = { hue1, hue2, hue3 };
 
-  color baseColor=color(hues[Math.round(random(0,2))],colorSat,colorBri,360);
-  color highlightColor=color(hue1,colorSat,100,60);
-  color blackColor=color(hue1,15,colorBri*0.25);
+  color baseColor=color(hues[Math.round(random(0,2))],colorSat,colorBri,360);
+  color highlightColor=color(hue1,colorSat,100,60);
+  color blackColor=color(hue1,15,colorBri*0.25);
 
-  textSize(scalePixelsX(txtSize));
+  textSize(scalePixelsX(txtSize));
 
-  bool buildingHasRoundedWindows=Math.round(random(0,1));
+  bool buildingHasRoundedWindows=Math.round(random(0,1));
 
-  int colSize=0;
-  int numCols = 5;
-  while (colSize<2) {
-    colSize=ceil(w/numCols);
-    numCols--;
-  }
-  int colPadding=ceil(colSize*0.25);
-  w=colPadding+(numCols*colSize)+colPadding;
+  int colSize=0;
+  int numCols = 5;
+  while (colSize<2) {
+    colSize=ceil(w/numCols);
+    numCols--;
+  }
+  int colPadding=ceil(colSize*0.25);
+  w=colPadding+(numCols*colSize)+colPadding;
 
-  int rowSize=0;
-  int numRows=int(random(30,50));
-  while (rowSize<2) {
-    rowSize=ceil(h/numRows);
-    numRows--;
-  }
-  int rowPadding=ceil(rowSize*0.05);
-  h=rowPadding+(numRows*rowSize)+rowPadding;
+  int rowSize=0;
+  int numRows=int(random(30,50));
+  while (rowSize<2) {
+    rowSize=ceil(h/numRows);
+    numRows--;
+  }
+  int rowPadding=ceil(rowSize*0.05);
+  h=rowPadding+(numRows*rowSize)+rowPadding;
 
-  while (h/w>2.5) {
-    h=h*0.8;
-    w=w*1.4;
-  }
+  while (h/w>2.5) {
+    h=h*0.8;
+    w=w*1.4;
+  }
 
-  var shadowWidth=w*random(1.05,1.15);
-  var buildingBaseColor=color(hue(baseColor), colorSat*0.6, colorBri, 360);
-  fill(buildingBaseColor);
-  scaleRect(x,y,shadowWidth,h); 
-  drawTexture("H", calcWidth*random(0.008, 0.015), 0.004, x, y, shadowWidth, h, hue(baseColor), colorSat*0.4, colorSat*0.6, colorBri*0.8, colorBri*1.0,200);
+  var shadowWidth=w*random(1.05,1.15);
+  var buildingBaseColor=color(hue(baseColor), colorSat*0.6, colorBri, 360);
+  fill(buildingBaseColor);
+  scaleRect(x,y,shadowWidth,h); 
+  drawTexture("H", calcWidth*random(0.008, 0.015), 0.004, x, y, shadowWidth, h, hue(baseColor), colorSat*0.4, colorSat*0.6, colorBri*0.8, colorBri*1.0,200);
 
-  drawTexture("H", calcWidth*random(0.010, 0.016), 0.004, x, y, w, h, hue(baseColor), colorSat*0.3, colorSat*0.5, colorBri*1.2, colorBri*1.7,340);
+  drawTexture("H", calcWidth*random(0.010, 0.016), 0.004, x, y, w, h, hue(baseColor), colorSat*0.3, colorSat*0.5, colorBri*1.2, colorBri*1.7,340);
 
-  drawRoof(x, y, w, h, shadowWidth, roofHue);
+  drawRoof(x, y, w, h, shadowWidth, roofHue);
 
-  stroke(blackColor); 
-  fill(blackColor);
-  var totalWindows=0;
-  var winWidth=colSize-colPadding*2;
-  while (totalWindows<6) {
-    float dx=x+colPadding;
-    float dy=y+(rowPadding*2);
-    int row=0;    
-    if (buildingHasRoundedWindows) {
-      dy+=winWidth*0.7;
-    }
-    while (dy<y+h-rowSize*2) {
-        while (dx<x+w-colSize) {
-          if (random(0,100)>82) {
-            
-            if (buildingHasRoundedWindows) {
-              scaleEllipse(dx+colPadding,dy-(winWidth*0.25),winWidth,winWidth);
-              scaleRect(dx+colPadding,dy+(winWidth*0.35),winWidth,winWidth*0.75);
-            } else {
-              scaleRect(dx+colPadding,dy+(winWidth*0.35),winWidth,winWidth);
-            }
-            if (random(0,100)>66) {
-              stroke(highlightColor);
-              if (buildingHasRoundedWindows) {
-                scaleLine(dx+colPadding+(winWidth*0.500),dy-winWidth*0.15,dx+colPadding+(winWidth*0.500),dy+winWidth);
-              } else {
-                scaleLine(dx+colPadding+(winWidth*0.500),dy+winWidth*0.25,dx+colPadding+(winWidth*0.500),dy+winWidth*1.2);
-              }
-              stroke(blackColor);
-            }
-            totalWindows++;
-            if (totalWindows>4) break;
-          }
-          dx+=colSize;
-        }
-      if (totalWindows>6) break;
-      if (buildingHasRoundedWindows) {
-        dy+=winWidth*2.5;
-      } else {
-        dy+=winWidth*1.7;
-      }
-      dx=x+colPadding;
-      row++; 
-      if (row>6) break;
-    }
-  }
+  stroke(blackColor); 
+  fill(blackColor);
+  var totalWindows=0;
+  var winWidth=colSize-colPadding*2;
+  while (totalWindows<6) {
+    float dx=x+colPadding;
+    float dy=y+(rowPadding*2);
+    int row=0;    
+    if (buildingHasRoundedWindows) {
+      dy+=winWidth*0.7;
+    }
+    while (dy<y+h-rowSize*2) {
+        while (dx<x+w-colSize) {
+          if (random(0,100)>82) {
+            
+            if (buildingHasRoundedWindows) {
+              scaleEllipse(dx+colPadding,dy-(winWidth*0.25),winWidth,winWidth);
+              scaleRect(dx+colPadding,dy+(winWidth*0.35),winWidth,winWidth*0.75);
+            } else {
+              scaleRect(dx+colPadding,dy+(winWidth*0.35),winWidth,winWidth);
+            }
+            if (random(0,100)>66) {
+              stroke(highlightColor);
+              if (buildingHasRoundedWindows) {
+                scaleLine(dx+colPadding+(winWidth*0.500),dy-winWidth*0.15,dx+colPadding+(winWidth*0.500),dy+winWidth);
+              } else {
+                scaleLine(dx+colPadding+(winWidth*0.500),dy+winWidth*0.25,dx+colPadding+(winWidth*0.500),dy+winWidth*1.2);
+              }
+              stroke(blackColor);
+            }
+            totalWindows++;
+            if (totalWindows>4) break;
+          }
+          dx+=colSize;
+        }
+      if (totalWindows>6) break;
+      if (buildingHasRoundedWindows) {
+        dy+=winWidth*2.5;
+      } else {
+        dy+=winWidth*1.7;
+      }
+      dx=x+colPadding;
+      row++; 
+      if (row>6) break;
+    }
+  }
 
 }
 
 void drawRoof(float x, float y, float w, float h, float shadowWidth, int roofHue) {
-  var roofLeft=x;
-  var roofRight=x+shadowWidth;
-  var roofColor=color(roofHue,random(60,90),random(50,90));
-  fill(roofColor);
-  scaleQuad(x-calcWidth*0.01,y,x+shadowWidth+(calcWidth*0.005),y, x+shadowWidth-(shadowWidth*0.05), y-h*0.09, x+(shadowWidth*0.06), y-h*0.09);
-  
-  roofColor=color(roofHue,random(60,80),random(20,35));
-  fill(roofColor);
-  scaleQuad(x+w,y,x+shadowWidth+(calcWidth*0.005),y, x+shadowWidth-(shadowWidth*0.05), y-h*0.09, x+w, y-h*0.09);
+  var roofLeft=x;
+  var roofRight=x+shadowWidth;
+  var roofColor=color(roofHue,random(60,90),random(50,90));
+  fill(roofColor);
+  scaleQuad(x-calcWidth*0.01,y,x+shadowWidth+(calcWidth*0.005),y, x+shadowWidth-(shadowWidth*0.05), y-h*0.09, x+(shadowWidth*0.06), y-h*0.09);
+  
+  roofColor=color(roofHue,random(60,80),random(20,35));
+  fill(roofColor);
+  scaleQuad(x+w,y,x+shadowWidth+(calcWidth*0.005),y, x+shadowWidth-(shadowWidth*0.05), y-h*0.09, x+w, y-h*0.09);
 
-  stroke(roofColor);
-  fill(roofColor);
-  textSize(scalePixelsX(shadowWidth*0.045));
-  var roofLeftX=x-shadowWidth*0.02;
-  var roofRightX=roofLeftX+shadowWidth+shadowWidth*0.02;
-  for (roofY=y-h*0.007; roofY>y-(h*0.09); roofY-=h*0.0045) {
-    for (roofX=roofLeftX; roofX<roofRightX; roofX+=shadowWidth*0.024) {
-      scaleText('o', roofX, roofY);
-    }
-    roofLeftX+=shadowWidth*0.005;
-    roofRightX-=shadowWidth*0.004;
-  }
+  stroke(roofColor);
+  fill(roofColor);
+  textSize(scalePixelsX(shadowWidth*0.045));
+  var roofLeftX=x-shadowWidth*0.02;
+  var roofRightX=roofLeftX+shadowWidth+shadowWidth*0.02;
+  for (roofY=y-h*0.007; roofY>y-(h*0.09); roofY-=h*0.0045) {
+    for (roofX=roofLeftX; roofX<roofRightX; roofX+=shadowWidth*0.024) {
+      scaleText('o', roofX, roofY);
+    }
+    roofLeftX+=shadowWidth*0.005;
+    roofRightX-=shadowWidth*0.004;
+  }
 }
 
 void drawTree(float xLeft, float yBot, float w, color treeColor, void blobSize) {
-  stroke(treeColor);
-  fill(treeColor);
-  textSize(scalePixelsX(calcWidth*0.0225));
+  stroke(treeColor);
+  fill(treeColor);
+  textSize(scalePixelsX(calcWidth*0.0225));
 
 
- float treeHeight=0; 
- float yDelta=14;
+  float treeHeight=0; 
+  float yDelta=14;
 
-  for (x=xLeft; x<xLeft+(w*0.5); x+=blobSize*0.8) {
-    for (y=yBot; y>yBot-treeHeight; y-=blobSize*0.8) {
-      text("^",scalePixelsX(x+calcWidth*random(-0.002,0.002)),scalePixelsY(y+calcWidth*random(-0.002,0.002))); 
-    }
-    treeHeight+=yDelta;    
-    yDelta=yDelta*0.97;
-  }
+  for (x=xLeft; x<xLeft+(w*0.5); x+=blobSize*0.8) {
+    for (y=yBot; y>yBot-treeHeight; y-=blobSize*0.8) {
+      text("^",scalePixelsX(x+calcWidth*random(-0.002,0.002)),scalePixelsY(y+calcWidth*random(-0.002,0.002))); 
+    }
+    treeHeight+=yDelta;    
+    yDelta=yDelta*0.97;
+  }
 
-  for (x=xLeft+(w*0.5); x<xLeft+w; x+=blobSize*0.8) {
-    for (y=yBot; y>yBot-treeHeight; y-=blobSize*0.8) {
-      text("^",scalePixelsX(x+calcWidth*random(-0.002,0.002)),scalePixelsY(y+calcWidth*random(-0.002,0.002))); 
-    }
-    treeHeight-=yDelta;    
-    yDelta=yDelta*1.03;
-  }  
+  for (x=xLeft+(w*0.5); x<xLeft+w; x+=blobSize*0.8) {
+    for (y=yBot; y>yBot-treeHeight; y-=blobSize*0.8) {
+      text("^",scalePixelsX(x+calcWidth*random(-0.002,0.002)),scalePixelsY(y+calcWidth*random(-0.002,0.002))); 
+    }
+    treeHeight-=yDelta;    
+    yDelta=yDelta*1.03;
+  }   
 }
 
 color colorSplitComplementLeft(int h) {
-  h+=150;
-  h=h%360;
-  return h;
+  h+=150;
+  h=h%360;
+  return h;
 }
 
 color colorSplitComplementRight(int h) {
-  h+=210;
-  h=h%360;
-  return h;
+  h+=210;
+  h=h%360;
+  return h;
 }
 
 float scalePixelsX(px) {
-  return int(px*(width/calcWidth));
+  return int(px*(width/calcWidth));
 }
 
 float scalePixelsY(px) {
-  return int(px*(height/calcHeight));
+  return int(px*(height/calcHeight));
 }
 
 void scaleLine(float x1, float y1, float x2, float y2) {
-  line(scalePixelsX(x1), scalePixelsY(y1), scalePixelsX(x2), scalePixelsY(y2));
+  line(scalePixelsX(x1), scalePixelsY(y1), scalePixelsX(x2), scalePixelsY(y2));
 }
 
 
 void scaleRect(float x, float y, float w, float h) {
-  rect(scalePixelsX(x), scalePixelsY(y), scalePixelsX(w), scalePixelsY(h));
+  rect(scalePixelsX(x), scalePixelsY(y), scalePixelsX(w), scalePixelsY(h));
 }
 
 void scaleQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
-  quad(scalePixelsX(x1), scalePixelsY(y1), scalePixelsX(x2), scalePixelsY(y2), scalePixelsX(x3), scalePixelsY(y3), scalePixelsX(x4), scalePixelsY(y4));
+  quad(scalePixelsX(x1), scalePixelsY(y1), scalePixelsX(x2), scalePixelsY(y2), scalePixelsX(x3), scalePixelsY(y3), scalePixelsX(x4), scalePixelsY(y4));
 }
 
 void scaleEllipse(float x, float y, float w, float h) {
-  ellipse(scalePixelsX(x), scalePixelsY(y), scalePixelsX(w), scalePixelsY(h));
-} 
+  ellipse(scalePixelsX(x), scalePixelsY(y), scalePixelsX(w), scalePixelsY(h));
+} 
 
 void scaleText(string txt, float x, float y) {
-  text(txt, scalePixelsX(x), scalePixelsY(y));
+  text(txt, scalePixelsX(x), scalePixelsY(y));
 }
 
 void drawPictureFrame() {
-  fill(0,0,100,360);   
-  noStroke();
-  
-  scaleRect(0,0,calcWidth,calcHeight*0.021);
-  drawTexture('X', calcWidth*0.0600, 0.003, 0,0,calcWidth,calcHeight*0.021, 0, 0, 0, 100, 100);
+  fill(0,0,100,360);    
+  noStroke();
+  
+  scaleRect(0,0,calcWidth,calcHeight*0.021);
+  drawTexture('X', calcWidth*0.0600, 0.003, 0,0,calcWidth,calcHeight*0.021, 0, 0, 0, 100, 100);
 
-  scaleRect(0,calcHeight*0.985,calcWidth,calcHeight*0.05);
-  drawTexture('X', calcWidth*0.0600, 0.003, 0,calcHeight*0.987,calcWidth,calcHeight*0.05, 0, 0, 0, 100, 100);
+  scaleRect(0,calcHeight*0.985,calcWidth,calcHeight*0.05);
+  drawTexture('X', calcWidth*0.0600, 0.003, 0,calcHeight*0.987,calcWidth,calcHeight*0.05, 0, 0, 0, 100, 100);
 
-  scaleRect(0,0,calcWidth*0.017,calcHeight*1.01);
-  drawTexture('X', calcWidth*0.0600, 0.003, 0,0,calcWidth*0.019,calcHeight*1.01, 0, 0, 0, 100, 100);
+  scaleRect(0,0,calcWidth*0.017,calcHeight*1.01);
+  drawTexture('X', calcWidth*0.0600, 0.003, 0,0,calcWidth*0.019,calcHeight*1.01, 0, 0, 0, 100, 100);
 
-  scaleRect(calcWidth*0.982,0,calcWidth,calcHeight*1.1);
-  drawTexture('X', calcWidth*0.0600, 0.003, calcWidth*0.982,0,calcWidth,calcHeight*1.1, 0, 0, 0, 100, 100);
+  scaleRect(calcWidth*0.982,0,calcWidth,calcHeight*1.1);
+  drawTexture('X', calcWidth*0.0600, 0.003, calcWidth*0.982,0,calcWidth,calcHeight*1.1, 0, 0, 0, 100, 100);
 }
-      
+      
 </script>
+
 <canvas id="puebloCanvas"></canvas>
+
 <div style="text-align:center; margin-top: 20px;">
   <button id="regenerateBtn" style="font-family: 'Courier New', monospace; font-size: 16px; padding: 10px 20px; margin: 0 10px; cursor: pointer;">Regenerate</button>
   <button id="downloadBtn" style="font-family: 'Courier New', monospace; font-size: 16px; padding: 10px 20px; margin: 0 10px; cursor: pointer;">Download</button>
@@ -378,19 +388,31 @@ document.addEventListener('DOMContentLoaded', function() {
   const canvas = document.getElementById('puebloCanvas');
   const regenerateBtn = document.getElementById('regenerateBtn');
   const downloadBtn = document.getElementById('downloadBtn');
- 
+  
   const p = Processing.getInstanceById('puebloCanvas');
 
 
   regenerateBtn.addEventListener('click', function() {
-    p.setup();
+
+    if (p && p.setup) {
+        p.setup();
+    } else {
+        console.error("Processing instance not found or initialized.");
+    }
   });
 
   downloadBtn.addEventListener('click', function() {
-    const link = document.createElement('a');
-    link.download = 'pueblo_art.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+
+    if (canvas && canvas.toDataURL) {
+      const link = document.createElement('a');
+      link.download = 'pueblo_art.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } else {
+        console.error("Canvas or toDataURL not available.");
+    }
   });
 });
 </script>
+</body>
+</html>
